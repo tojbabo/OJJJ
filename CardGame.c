@@ -50,7 +50,7 @@ void input(char* set,char* ext)
 			} while (set[com] != '?');
 			set[com] = i;
 		}
-		do //¿Ö 2¹ø¾´°ÇÁö ?
+		do //ì™œ 2ë²ˆì“´ê±´ì§€ ?
 		{
 			com = rand() % 49;
 		} while (set[com] != '?');
@@ -68,45 +68,45 @@ void play(char* set,char* set2,char* ext)
 		system("cls");
 		for (i = 0; i < 49; i++)
 		{
-			if (i == point) // ÇöÀç ÁöÁ¤ÇÏ´Â Æ÷ÀÎÅÍ
+			if (i == point) // í˜„ì¬ ì§€ì •í•˜ëŠ” í¬ì¸í„°
 			{
-				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2); // »ö ¹Ù²Ù°í
-				if (i == select1 || i == select2) // µÚÁıÀº Ä«µå 1,2
-					printf(" %c ", set2[i]);	// °á°ú Ãâ·Â
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2); // ìƒ‰ ë°”ê¾¸ê³ 
+				if (i == select1 || i == select2) // ë’¤ì§‘ì€ ì¹´ë“œ 1,2
+					printf(" %c ", set2[i]);	// ê²°ê³¼ ì¶œë ¥
 				else
-					printf(" %c ", set[i]);	// ¾Æ´Ï¸é ·£´ıÄ«µå
+					printf(" %c ", set[i]);	// ì•„ë‹ˆë©´ ëœë¤ì¹´ë“œ
 			}
-			else if (i == select1 || i == select2) // µÚÁı¾î ³õÀº Ä«µå´Â
+			else if (i == select1 || i == select2) // ë’¤ì§‘ì–´ ë†“ì€ ì¹´ë“œëŠ”
 			{
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5); 
-				printf(" %c ", set2[i]); // ±×´ë·Î °á°ú Ãâ·Â
+				printf(" %c ", set2[i]); // ê·¸ëŒ€ë¡œ ê²°ê³¼ ì¶œë ¥
 			}
-			else						// ÁöÁ¤ÇÏÁö ¾Ê°í ÀÖ´Â ´Ù¸¥ ¹è¿­µéÀº
+			else						// ì§€ì •í•˜ì§€ ì•Šê³  ìˆëŠ” ë‹¤ë¥¸ ë°°ì—´ë“¤ì€
 			{
 				if (set[i] != '?')
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
 				else
 					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-				printf(" %c ",set[i]);		// ·£´ıÄ«µå·Î Ãâ·Â
+				printf(" %c ",set[i]);		// ëœë¤ì¹´ë“œë¡œ ì¶œë ¥
 			}
 
 			if ((i + 1) % 7 == 0)
 				printf("\n");
 		}
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-		printf("------------------- Á¡¼ö : %d Á¡ -------------------\n", score);
-		printf("\n< ÀÌµ¿ : ¡æ¡ç¡è¡é , È®ÀÎ : Space bar , Á¾·á : ESC , Á¤´ä : ! >\n");
+		printf("------------------- ì ìˆ˜ : %d ì  -------------------\n", score);
+		printf("\n< ì´ë™ : â†’â†â†‘â†“ , í™•ì¸ : Space bar , ì¢…ë£Œ : ESC , ì •ë‹µ : ! >\n");
 
-		if (select1 != -1&& select2 != -1&&select1!=select2)	// µÎ°³ÀÇ Ä«µå¸¦ µÚÁı¾ú´Ù¸é
+		if (select1 != -1&& select2 != -1&&select1!=select2)	// ë‘ê°œì˜ ì¹´ë“œë¥¼ ë’¤ì§‘ì—ˆë‹¤ë©´
 			result(&score,set, set2, &select1, &select2); 
 
 		if (key == 33)
 		{
-			printf("Á¤´äÀº ??? < 3°³ °°ÀÌ ÀÔ·Â > : ");
+			printf("ì •ë‹µì€ ??? < 3ê°œ ê°™ì´ ì…ë ¥ > : ");
 			while (1)
 			{
 				if (strlen(gets(ans)) > 10)
-					printf("´Ù½Ã ÀÔ·Â!!!!!\n");
+					printf("ë‹¤ì‹œ ì…ë ¥!!!!!\n");
 				else
 					break;
 			}
@@ -167,13 +167,13 @@ void keybord(int* key, int* point,int* select1, int* select2)
 
 void result(int* score,char* set, char* set2, int* select1, int* select2)
 {
-	*score -= 5; // ¾ß¹ÚÇÏ°Ô 5Á¡ ±ï°í ½ÃÀÛ
-	if (set2[*select1] == set2[*select2]) // µÎ Ä«µå°¡ °°Àº Ä«µå¶ó¸é
-	{									// ·£´ıÄ«µå¿¡ °á°úÄ«µå ÀÔ·Â
+	*score -= 5; // ì•¼ë°•í•˜ê²Œ 5ì  ê¹ê³  ì‹œì‘
+	if (set2[*select1] == set2[*select2]) // ë‘ ì¹´ë“œê°€ ê°™ì€ ì¹´ë“œë¼ë©´
+	{									// ëœë¤ì¹´ë“œì— ê²°ê³¼ì¹´ë“œ ì…ë ¥
 		set[*select1] = set2[*select1];
 		set[*select2] = set2[*select2];
 	}
-		*select1 = -1;				// È®ÀÎÈÄ ´Ù½Ã Ä«µå ¼±ÅÃ ¸®¼Â
+		*select1 = -1;				// í™•ì¸í›„ ë‹¤ì‹œ ì¹´ë“œ ì„ íƒ ë¦¬ì…‹
 		*select2 = -1;
 }
 
@@ -190,7 +190,7 @@ void done(char* ans, char* ext,int* count)
 	printf("\n\n");
 	if (k > 3)
 	{
-		printf("Á¤´äÀº ¼¼°³ÀÔ´Ï´Ù ¿À´ä!!!!!!!\n");
+		printf("ì •ë‹µì€ ì„¸ê°œì…ë‹ˆë‹¤ ì˜¤ë‹µ!!!!!!!\n");
 		return;
 	}
 	for (k=0,i = 0; i < 3; i++)
@@ -210,11 +210,11 @@ void done(char* ans, char* ext,int* count)
 	if (k == 3)
 	{
 		system("cls");
-		printf("\n********* ÃàÇÏÇÕ´Ï´Ù. ¸ğµÎ Á¤´äÀÔ´Ï´Ù.**********\n\n");
+		printf("\n********* ì¶•í•˜í•©ë‹ˆë‹¤. ëª¨ë‘ ì •ë‹µì…ë‹ˆë‹¤.**********\n\n");
 		strcpy(ans, "111");
 	}
 	else if (k > 0)
-		printf(" ---%d°³ Á¤´ä !!\n", k);
+		printf(" ---%dê°œ ì •ë‹µ !!\n", k);
 	else
-		printf("¿À´ä!!!!\n");
+		printf("ì˜¤ë‹µ!!!!\n");
 }
