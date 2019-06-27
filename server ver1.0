@@ -1,8 +1,8 @@
 // 자세한 내용은 생략
 // 기본 서버 베이스 및 테스트 용
 // TCP/IP 기반으로 
-// 에코잉
-// 받은 문자열 출력
+// 에코잉 기능 갖고있음
+// network programming echo server 기본 코드
 
 #include <stdio.h>
 #include<stdlib.h>
