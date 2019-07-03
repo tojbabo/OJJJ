@@ -11,7 +11,7 @@
 목적 - 캠으로 촬영된 영상을 서버로 전송했다가 다시 수신해서 출력하기
        서버는 AWS ec2 ubuntu.
        
-~~~~~~ - <tcp_Server ver1.0.c> / <Client ver Python 1.0.py> / Client ver C++ 1.0.cpp> / <Header to Client C++ 1.0.h>
+이전의 내용 - <tcp_Server ver1.0.c> / <Client ver Python 1.0.py> / Client ver C++ 1.0.cpp> / <Header to Client C++ 1.0.h>
 
 190703 - 캠으로 촬영된 영상의 순간 프레임을 서버로 전송하기 위해서는 데이터의 변환이 필요. 
          Mat(프레임)을 uchar*(변환된 형태)로 변환은 기본 제공해줌.
