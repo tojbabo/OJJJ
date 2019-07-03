@@ -21,4 +21,4 @@
        2) char*형태로 서버 데이터 송신 가능 확인.
        3) Mat -> uchar* -> char*(송신) -> char*(수신) -> uchar* -> Mat -> 출력.
        4) 문제 없이 작동함을 확인. 딜레이는 약 0.16 ~ 0.17 사이
-       < udp_Server ver 1.0.c> / < Client C++ ver 1.1.cpp >
+       < udp_Server ver 1.0.c> / < Client ver C++ 1.1.cpp >
