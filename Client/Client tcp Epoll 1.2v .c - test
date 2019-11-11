@@ -1,0 +1,171 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
+#include<arpa/inet.h>
+#include<sys/socket.h>
+#include<pthread.h>
+
+#define BUF_SIZE 1024
+
+#define PORT 9000
+#define IP "127.0.0.1"
+
+void error_handling(char *message){
+	fputs(message,  stderr);
+	fputc('\n',stderr);
+	exit(1);
+}
+void* send_pic(void*);
+void* recv_pic(void*);
+
+int my_id;
+int others[10];
+int others_num=0;
+struct sockaddr_in s_adr;
+
+int main(){
+	pthread_t thread_send;
+	pthread_t thread_recv[10];
+	int num;
+	
+	int sock;
+	char message[BUF_SIZE];
+	int str_len;
+	int recv_len,recv_cnt;
+	//struct sockaddr_in s_adr;
+
+	sock = socket(PF_INET, SOCK_STREAM,0);
+	if(sock == -1)
+		error_handling("socket() error");
+
+	memset(&s_adr, 0, sizeof(s_adr));
+	s_adr.sin_family = AF_INET;
+	s_adr.sin_addr.s_addr = inet_addr(IP);
+	s_adr.sin_port = htons(PORT);
+
+	if(connect(sock, (struct sockaddr*)&s_adr,sizeof(s_adr))==-1)
+		error_handling("connect() error!");
+	else {
+		write(sock, "FC", strlen("FC"));
+		str_len = read(sock, message, BUF_SIZE);
+		message[str_len] = 0;
+		printf("%s\n", message);
+		if (!strcmp(message, "FC")) {
+			str_len = read(sock, message, BUF_SIZE);
+			message[str_len] = 0;
+			my_id = atoi(message);
+			printf("my id is : %d\n", my_id);
+			puts("Connected.........");
+			if (pthread_create(&thread_send, NULL, send_pic, NULL) != 0) {
+				puts("pthread_create() error!");
+				return -1;
+			}
+		}
+		else {
+			puts("connecting error");
+			return -1;
+		}
+	}
+	while(1)
+	{/*
+		fputs("Iput message(Q to quit) : ", stdout);
+		fgets(message, BUF_SIZE, stdin);
+		if(!strcmp(message,"q\n")||!strcmp(message,"Q\n"))
+			break;
+		str_len = write(sock, message, strlen(message));*/
+		recv_cnt = read(sock,message,BUF_SIZE);
+		message[str_len]=0;
+		printf("Message from server : %s", message);
+		if (message[0] == '$') {
+			// 서버로 부터 새로운 클라이언트의 연결이 발생했음을 들었을때,
+			// 새로운 클라이언트의 아이디도 같이 받음
+			char* target = strchr(message, ':') + 1;
+			num = atoi(target);
+			others[others_num] = num;
+			printf("other client : %d\n",num);
+			
+			// 수신받은 새로운 클라이언트의 아이디를 가지고
+			// 내 아이디와 수신받을 새로운 클라이언트의 아이디를 통해 전송받을 쓰레드 생성
+			if (pthread_create(&thread_recv[others_num], NULL, recv_pic, (void*)&num) != 0) {
+				puts("pthread_create() error!");
+				return -1;
+			}
+			others_num++;
+		}
+	}
+	close(sock);
+	return 0;
+}
+void* send_pic(void* arg) {
+	int sock_pic_send;
+	char msg[BUF_SIZE];
+	int ok=1;
+	int str_len;
+
+	puts("send_thread create ok");
+	sock_pic_send = socket(PF_INET, SOCK_STREAM, 0);
+
+	if (connect(sock_pic_send, (struct sockaddr*)&s_adr, sizeof(s_adr)) == -1)
+		error_handling("connect() error!");
+
+	sprintf(msg, "FSC:%d", my_id);
+
+	write(sock_pic_send, msg, strlen(msg));
+	puts("send FSC");
+
+	str_len = read(sock_pic_send, msg, BUF_SIZE);
+	msg[str_len] = 0;
+	printf("%s\n", msg);
+	if (!strcmp(msg, "FSC"))
+		puts("sned_pic thread connect ok!");
+	else {
+		puts("connecting error");
+		ok = 0;
+	}
+	while (ok) {
+		sprintf(msg, "%d", my_id);
+		write(sock_pic_send, msg, strlen(msg));
+		sleep(5);
+	}
+}
+void* recv_pic(void* arg) {
+	int sock_pic_recv;
+	int target;
+	char msg[BUF_SIZE];
+	int str_len;
+	int ok = 1;
+	target = *((int*)arg);
+	int check;
+
+	puts("recv_thread create ok");
+	sock_pic_recv = socket(PF_INET, SOCK_STREAM, 0);
+	scanf("%d", &check);
+	check = connect(sock_pic_recv, (struct sockaddr*)&s_adr, sizeof(s_adr));
+
+	if (check == -1)
+		error_handling("connect() error!");
+
+	sprintf(msg, "TRC:%d-%d", my_id,target);
+	printf("%s\n", msg);
+	write(sock_pic_recv, msg, strlen(msg));
+	
+	str_len = read(sock_pic_recv, msg, strlen(msg));
+	msg[str_len] = 0;
+	printf("%s\n", msg);
+
+	if (!strcmp(msg, "TRC"))
+		puts("target recv connecting");
+	else {
+		puts("connecting error");
+		ok = 0; ddfESZ
+	}
+	/**/
+	while (ok) {
+		str_len = read(sock_pic_recv, msg, BUF_SIZE);
+		msg[str_len] = 0;
+
+		printf("%d : %s\n", target, msg);
+	}
+}
+
